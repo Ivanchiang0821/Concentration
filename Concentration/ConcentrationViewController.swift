@@ -89,24 +89,24 @@ class ConcentrationViewController: UIViewController {
         }
     }
     private var emojiChoices = "👻🎃🧟‍♀️🧛‍♂️🧜‍♀️🧞‍♀️🧚‍♂️🧜‍♂️"
-    private var halloween = [""], emojiFaces = [""], handGesture = [""], faces = [""], dress = [""], animals = [""], allScene = [[""]], randomScene = [""]
-    private func setupScence() {
-        halloween = ["👻", "🎃", "🧟‍♀️", "🧛‍♂️", "🧜‍♀️", "🧞‍♀️", "🧚‍♂️", "🧜‍♂️"]
-        emojiFaces = ["😃", "😗", "😎", "😡", "😱", "🤪", "😇", "😷"]
-        handGesture = ["🤲", "👏", "👍", "✊", "🤟", "👌", "✌️", "🖕"]
-        faces = ["👩", "👱‍♀️", "💂‍♀️", "🧕", "👮‍♀️", "👩‍🌾", "👩‍🍳", "🤴"]
-        dress = ["🧥", "👚", "👖", "👔", "👗", "👘", "👙", "👕"]
-        animals = ["🦆", "🦁", "🐰", "🐷", "🐸", "🐼", "🦄", "🐒"]
-        allScene = [halloween, emojiFaces, handGesture, faces, dress, animals]
-        randomScene = getRandomScene()
-    }
-    private func getRandomScene() -> [String] {
-        let index = allScene.count.arc4random
-        return allScene[index]
-    }
+//    private var halloween = [""], emojiFaces = [""], handGesture = [""], faces = [""], dress = [""], animals = [""], allScene = [[""]], randomScene = [""]
+//    private func setupScence() {
+//        halloween = ["👻", "🎃", "🧟‍♀️", "🧛‍♂️", "🧜‍♀️", "🧞‍♀️", "🧚‍♂️", "🧜‍♂️"]
+//        emojiFaces = ["😃", "😗", "😎", "😡", "😱", "🤪", "😇", "😷"]
+//        handGesture = ["🤲", "👏", "👍", "✊", "🤟", "👌", "✌️", "🖕"]
+//        faces = ["👩", "👱‍♀️", "💂‍♀️", "🧕", "👮‍♀️", "👩‍🌾", "👩‍🍳", "🤴"]
+//        dress = ["🧥", "👚", "👖", "👔", "👗", "👘", "👙", "👕"]
+//        animals = ["🦆", "🦁", "🐰", "🐷", "🐸", "🐼", "🦄", "🐒"]
+//        allScene = [halloween, emojiFaces, handGesture, faces, dress, animals]
+//        randomScene = getRandomScene()
+//    }
+//    private func getRandomScene() -> [String] {
+//        let index = allScene.count.arc4random
+//        return allScene[index]
+//    }
     private var emojiDic = [Card: String]()
     private func emojiRandomPick(for card: Card) -> String {
-        if emojiDic[card] == nil, randomScene.count > 0 {
+        if emojiDic[card] == nil, emojiChoices.count > 0 {
 //                emojiDic[card] = randomScene.remove(at: randomScene.count.arc4random)
             let randomIndex = emojiChoices.index(emojiChoices.startIndex, offsetBy: emojiChoices.count.arc4random)
             emojiDic[card] = String(emojiChoices.remove(at: randomIndex))
