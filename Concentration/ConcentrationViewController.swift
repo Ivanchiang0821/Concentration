@@ -14,22 +14,32 @@ class ConcentrationViewController: UIViewController {
     private lazy var game = Concentration(numberOfPairsOfCards: numberOfPairsOfCards )
     
     private var numberOfPairsOfCards: Int { //Computed property, it compute
-            return (cardButtons.count + 1 ) / 2
+            return (visibleCardButtons.count + 1 ) / 2
     }
-//    private func updateFlipCountLable() {
-//        let attributes: [NSAttributedStringKey:Any] = [
-//            .strokeWidth: 5.0,
-//            .strokeColor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-//        ]
-//        let attributeString: [NSAttributedString](
-//        string: " Flips: \(flipCount)",
-//            attributes: attributes
-//        )
-//    }
+    private func updateFlipCountLable() {
+        let attributes: [NSAttributedStringKey:Any] = [
+            .strokeWidth: 5.0,
+            .strokeColor: #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+        ]
+        let attributeString = NSAttributedString(
+            string: traitCollection.verticalSizeClass == .compact ? " Flips\n\(flipCount)" : " Flips: \(flipCount)",
+            attributes: attributes
+        )
+        flipCountLabel.attributedText = attributeString
+    }
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateFlipCountLable()
+    }
     private(set) var flipCount = 0 {//Property Observer, Observering rather than computing
         didSet {
-            flipCountLabel.text = "flips: \(flipCount)"
+            updateFlipCountLable()
+//            flipCountLabel.text = "flips: \(flipCount)"
         }
+    }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateViewFromModel()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,9 +50,13 @@ class ConcentrationViewController: UIViewController {
     
     @IBOutlet private var cardButtons: [UIButton]!
     
+    private var visibleCardButtons: [UIButton]! {
+        return cardButtons?.filter { !$0.superview!.isHidden }
+    }
+    
     @IBAction private func touchCard(_ sender: UIButton) {
         flipCount += 1
-        if let cardNumber = cardButtons.index(of: sender){
+        if let cardNumber = visibleCardButtons.index(of: sender){
             print("cardNumber:\(cardNumber)")
             game.chooseCard(at: cardNumber)
             updateViewFromModel()
@@ -56,8 +70,8 @@ class ConcentrationViewController: UIViewController {
     
     private func resumeViewFromModel() {
         flipCount = 0
-        for index in cardButtons.indices {
-            let button = cardButtons[index]
+        for index in visibleCardButtons.indices {
+            let button = visibleCardButtons[index]
             button.setTitle("", for: UIControlState.normal)
             button.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
         }
@@ -66,10 +80,10 @@ class ConcentrationViewController: UIViewController {
         game.shufflingCard(numberOfPairsOfCards: numberOfPairsOfCards)
     }
     private func updateViewFromModel() {
-        if cardButtons != nil {
-            for index in cardButtons.indices {
+        if visibleCardButtons != nil {
+            for index in visibleCardButtons.indices {
                 //print("cardButtons index:\(index)")
-                let button = cardButtons[index]
+                let button = visibleCardButtons[index]
                 let card = game.cards[index]
                 if card.isFaceUp {
                     button.setTitle(emojiRandomPick(for: card), for: UIControlState.normal)
